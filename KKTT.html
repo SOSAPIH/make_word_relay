@@ -1,0 +1,91 @@
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h2>다시 돌아온 쿵쿵따</h2>
+    <div><span id="turn">1</span>번째 차례</div>
+    <div>제시어: <span id="sug"></span></div>
+    <div><input type="text"> <button>입력</button></div>
+    <div>제한시간 : <span id="time"></span></div>
+
+    <script>
+        const $turn = document.querySelector('#turn');
+        const $input = document.querySelector('input');
+        const $button =document.querySelector('button');
+        const $time = document.querySelector('#time');
+        const $sug = document.querySelector('#sug'); // 제시어
+
+        let sug = $sug.textContent; // 제시어 칸의 textContent  // const를 사용하면 안된다.
+        let word; // 입력하는 단어
+        
+        let number = parseInt(prompt('몇명이십니까?'), 10);
+
+        // 처음 인원 물어보는 코드
+        while(!!isNaN(number)){
+            alert("다시 입력해주세요!");
+            number = parseInt(prompt("몇명이 플레이합니까?"), 10);
+            if(!isNaN(number)){
+                break;
+            }
+        }
+        // input의 value를 event로 받아오는 코드
+        const onInput = (event) => {
+            word = event.target.value;
+        }
+        // button 클릭시 event로 발생시킬 코드
+        
+        const onBtnClick = () => { // 끝말잇기와 똑같은 조건에 length === 3의 조건을 추가해준다.
+            //제한시간 10s안에 입력하느냐?
+            if($input.value.length ===3 && ((!sug)||(sug[sug.length-1] == word[0]))){
+                //word.length를 사용하면 안됨 why? word는 초기 단어를 받고 초기화되지 않은 상태 이기때문에 click만하면 word.length가 3으로 인식해 차례를 넘김
+                sug = word;
+                $sug.textContent = word;
+                let turn = Number($turn.textContent); // 인원 차례.
+                // turn은 textContent 그 자체가 아니라 그것의 수를 가리킬 뿐이다...
+                if(turn === number){
+                    $turn.textContent = 1;
+                }else{
+                    //$turn.textContent = order + 1; 이렇게 할 경우 문자열 + 숫자열이 돼서 1+ "1" = "11"의 결과물이 나옴
+                    $turn.textContent = turn + 1;
+                    //순서의 textContent를 숫자로 만들어서 숫자 1을 더하게 한 것을 다시 textContent안에 대입한다.
+                }
+                
+            }else{
+                alert("다시 입력하세요");
+            }
+            $input.value = '';
+            $input.focus();
+
+            //반복문을 실행시킨다    
+            let time = 10;
+            let sec;
+            let fnTimer = () => {setInterval(function () {
+                sec = time;
+                $time.textContent = sec + "초 남았습니다.";
+                time--;
+                if ((time < 0)) { //시간초과
+                    clearInterval(fnTimer);
+                    alert("실패!");
+                }  
+                 else if($sug.textContent == word) { //
+                    clearInterval(fnTimer);
+                    fnTimer();
+                }
+            }, 1000);                       
+        }
+    }
+        
+        
+            
+
+        $input.addEventListener('input', onInput);
+        $button.addEventListener('click', onBtnClick);
+        
+
+    </script>
+</body>
+</html>

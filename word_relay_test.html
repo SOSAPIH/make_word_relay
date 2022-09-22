@@ -1,0 +1,59 @@
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>끝말잇기 게임</title>
+</head>
+
+<body>
+    <div><span id="order">1</span>번째 참가자</div>
+    <div>제시어: <span id="word"></span></div>
+    <input type="text">
+    <button>입력</button>
+    <script>
+        let number = parseInt(prompt("몇명이 플레이합니까?"), 10);
+        while (!!isNaN(number)) {
+            alert("올바른 입력이 아닙니다.");
+            number = parseInt(prompt("몇명이 플레이합니까?"), 10);
+            if (!isNaN(number)) {
+                break;
+            }
+        }
+
+        const $button = document.querySelector("button"); // 버튼
+        const $input = document.querySelector("input"); // 입력 단어
+        const $word = document.querySelector("#word");  //제시어
+        const $order = document.querySelector("#order");  //순서
+        let word = $word.textContent; //제시어의 칸의 textContent
+        let newWord; // 새로 입력한 단어
+
+
+        const onClickButton = () => {
+            if (newWord.length ==3 &&((!word) || (word[word.length - 1] == newWord[0]))) {
+                word = newWord;
+                $word.textContent = word;
+                const order = Number($order.textContent);
+                if (order === number) {
+                    $order.textContent = 1; 
+                } else {
+                    $order.textContent = order + 1;
+                }
+            } else {
+                alert("올바르지 않습니다.");
+            }
+            $input.value = '';
+            $input.focus();
+        }
+        const onInput = (event) => {
+            newWord = event.target.value;
+
+        }
+        $input.addEventListener("input", onInput);
+        $button.addEventListener("click", onClickButton);
+
+    </script>
+</body>
+
+</html>
