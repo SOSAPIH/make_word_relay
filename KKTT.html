@@ -18,6 +18,17 @@
         const $button =document.querySelector('button');
         const $time = document.querySelector('#time');
         const $sug = document.querySelector('#sug'); // 제시어
+        let sec;
+        let interval = setInterval(callback, 1000);
+        function callback(){
+            $time.textContent = sec + "초 남았습니다.";
+            sec--;
+            if (sec<0) {
+                clearInterval(interval);
+                alert("실패");
+            }
+        }
+
 
         let sug = $sug.textContent; // 제시어 칸의 textContent  // const를 사용하면 안된다.
         let word; // 입력하는 단어
@@ -25,7 +36,7 @@
         let number = parseInt(prompt('몇명이십니까?'), 10);
 
         // 처음 인원 물어보는 코드
-        while(!!isNaN(number)){
+        while(isNaN(number)){
             alert("다시 입력해주세요!");
             number = parseInt(prompt("몇명이 플레이합니까?"), 10);
             if(!isNaN(number)){
@@ -40,9 +51,12 @@
         
         const onBtnClick = () => { // 끝말잇기와 똑같은 조건에 length === 3의 조건을 추가해준다.
             //제한시간 10s안에 입력하느냐?
+            clearInterval(interval);
             if($input.value.length ===3 && ((!sug)||(sug[sug.length-1] == word[0]))){
                 //word.length를 사용하면 안됨 why? word는 초기 단어를 받고 초기화되지 않은 상태 이기때문에 click만하면 word.length가 3으로 인식해 차례를 넘김
+                // clearInterval(interval);
                 sug = word;
+                sec = 10;
                 $sug.textContent = word;
                 let turn = Number($turn.textContent); // 인원 차례.
                 // turn은 textContent 그 자체가 아니라 그것의 수를 가리킬 뿐이다...
@@ -59,32 +73,17 @@
             }
             $input.value = '';
             $input.focus();
-
-            //반복문을 실행시킨다    
-            let time = 10;
-            let sec;
-            let fnTimer = () => {setInterval(function () {
-                sec = time;
-                $time.textContent = sec + "초 남았습니다.";
-                time--;
-                if ((time < 0)) { //시간초과
-                    clearInterval(fnTimer);
-                    alert("실패!");
-                }  
-                 else if($sug.textContent == word) { //
-                    clearInterval(fnTimer);
-                    fnTimer();
-                }
-            }, 1000);                       
-        }
+            //여기서 다시
+            interval = setInterval(callback, 1000);
     }
-        
-        
-            
+
+           
+
+
 
         $input.addEventListener('input', onInput);
         $button.addEventListener('click', onBtnClick);
-        
+        399
 
     </script>
 </body>
