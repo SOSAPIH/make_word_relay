@@ -54,21 +54,24 @@
         const $result = document.querySelector('#result');
         
         const onClickNumber = (event) => {   //함수가 필요하므로 return()이 필요하고 return은 생략이 가능해서 현재와 같이 표현 가능 ) 함수가 함수를 return하는 함수를 고차함수(high order function)
-            if(operator){
-                if(!numTwo){
-                    $result.value ="";
+            if(!operator){ //비어있다
+                numOne += event.target.textContent;
+                $result.value += event.target.textContent;
+                return;
+            }
+             // 비어있지 않다
+                if (!numTwo) {
+                    $result.value = "";
                 }
                 numTwo += event.target.textContent;
-            }else{
-                numOne += event.target.textContent;
+                $result.value += event.target.textContent;
             }   
-            $result.value += event.target.textContent;
-        }
+        
 
         document.querySelector('#num-0').addEventListener('click', onClickNumber); 
         document.querySelector('#num-1').addEventListener('click', onClickNumber); 
         document.querySelector('#num-2').addEventListener('click', onClickNumber); 
-        document.querySelector('#num-3').addEventListener('click', onClickNumber); 
+        document.querySelector('#num-3').addEventListener('click', onClickNumber);
         document.querySelector('#num-4').addEventListener('click', onClickNumber); 
         document.querySelector('#num-5').addEventListener('click', onClickNumber); 
         document.querySelector('#num-6').addEventListener('click', onClickNumber); 
@@ -89,8 +92,41 @@
         document.querySelector('#minus').addEventListener('click', onClickOperator('-')); 
         document.querySelector('#divide').addEventListener('click', onClickOperator('/')); 
         document.querySelector('#multiply').addEventListener('click', onClickOperator('*')); 
-        document.querySelector('#calculate').addEventListener('click',()=>{}); 
-        document.querySelector('#clear').addEventListener('click',()=>{});  
+
+        document.querySelector('#calculate').addEventListener('click',()=>{
+            if(numTwo){
+                switch(operator){
+                    case '+':
+                        $result.value = parseInt(numOne) + parseInt(numTwo);
+                        break;
+                    case '-':
+                        $result.value = numOne - numTwo;
+                        break;
+                    case '*':
+                        $result.value = numOne * numTwo;
+                        break;
+                    case'/':
+                        $result.value = numOne / numTwo;
+                        break;
+                    default:
+                        break;
+                }              
+                numOne = $result.value;
+                numTwo = "";
+                operator = "";
+                $operator.value = "";
+
+            } else {
+                alert('숫자를 먼저 입력하세요');
+            }
+        }); 
+        document.querySelector('#clear').addEventListener('click',()=>{
+            numOne = "";
+            numTwo = "";
+            operator = "";
+            $operator.value = "";
+            $result.value = "";
+        });  
     </script>
 </body>
 </html>
