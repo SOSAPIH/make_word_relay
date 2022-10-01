@@ -54,9 +54,13 @@
         const $result = document.querySelector('#result');
         
         const onClickNumber = (event) => {   //함수가 필요하므로 return()이 필요하고 return은 생략이 가능해서 현재와 같이 표현 가능 ) 함수가 함수를 return하는 함수를 고차함수(high order function)
-            if(!operator){ //비어있다
+               
+             if(!numOne){ //비어있다
                 numOne += event.target.textContent;
                 $result.value += event.target.textContent;
+                if(operator =="-"){
+                    numOne = -numOne;
+                }
                 return;
             }
              // 비어있지 않다
@@ -80,14 +84,36 @@
         document.querySelector('#num-9').addEventListener('click', onClickNumber); 
 
                 const onClickOperator = (op) => () => {
-                        if (numOne) {
-                            operator = op
-                            $operator.value = op;
-                        } else {
+                        if (numOne||(!numOne && op == "-")) {
+                            if(numTwo){
+                                switch (operator) {
+                                    case '+':
+                                        $result.value = parseInt(numOne) + parseInt(numTwo);
+                                        break;
+                                    case '-':
+                                        $result.value = numOne - numTwo;
+                                        break;
+                                    case '*':
+                                        $result.value = numOne * numTwo;
+                                        break;
+                                    case '/':
+                                        $result.value = numOne / numTwo;
+                                        break;
+                                    default:
+                                        break;
+                               
+                            }
+                            numOne = $result.value;
+                            numTwo = "";
+                        }
+                        operator = op;
+                        $operator.value = op;
+                    }
+                        else{
                             alert("숫자를 먼저 입력하세요.");
                         }
-                    }
-
+                    
+                }
         document.querySelector('#plus').addEventListener('click', onClickOperator('+')); 
         document.querySelector('#minus').addEventListener('click', onClickOperator('-')); 
         document.querySelector('#divide').addEventListener('click', onClickOperator('/')); 

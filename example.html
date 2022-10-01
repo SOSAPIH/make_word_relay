@@ -1,0 +1,54 @@
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h2 id="time">Count Down!</h2>
+    <button>입력</button>
+    <script>
+        let interval = setInterval(callback,1000);
+        function callback() {
+            console.log('a');
+        }
+        clearInterval(interval);
+        interval = setInterval(callback,1000);
+       
+
+
+        // 다음의 코드를 줄여보자
+        // function test(){
+        //     let result = "";
+        //     if(a){
+        //         if(!b){
+        //             result = 'c';
+        //         }
+        //     }else{
+        //         result = 'a';
+        //     }
+        //     result += "b";
+        //     return result;
+        // }
+
+        function test(){
+                let result = "";
+                if(!a){
+                result = 'a';
+                result += "b";
+                return result;
+                }
+                if(!b){
+                    result = 'c';
+                }
+                result += "b";
+                return result;
+            }
+        
+        
+
+    </script>
+</body>
+</html>
+
