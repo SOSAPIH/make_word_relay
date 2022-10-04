@@ -15,21 +15,24 @@
       const $input =document.getElementById("input");
       const $form = document.getElementById("form");
       const $logs = document.getElementById("logs");
+
+      let numbers = []; // for문을 통해 number에 1~9까지의 수를 배열에 push했음
+      let answer = []; // 빈 배열 answer에 numbers에서 랜덤한 index인 수를 4번(4개의 숫자를) 넣음
+      let tries = [];
       let out = 1;
 
-      const numbers = []; // for문을 통해 number에 1~9까지의 수를 배열에 push했음
-      for(let n=0;n<9;n++){
-        numbers.push(n+1);
+      function makeAnswer(){
+        for (let n = 0; n < 9; n++) {
+          numbers.push(n + 1);
+        }
+        for (let n = 0; n < 4; n++) {
+          let index = Math.floor(Math.random() * numbers.length);// index는 0~8까지임 numbers[8]까지 있기 때문에 random*9에 +1을 안함        
+          answer.push(numbers[index]);
+          numbers.splice(index, 1); // answer에 push한 수를 numbers에서 지워야 4개의 수가 겹치지 않음.  
+        }
+        return;
       }
-      
-      const answer = []; // 빈 배열 answer에 numbers에서 랜덤한 index인 수를 4번(4개의 숫자를) 넣음
-      for(let n=0;n<4;n++){
-        let index = Math.floor(Math.random()*numbers.length);// index는 0~8까지임 numbers[8]까지 있기 때문에 random*9에 +1을 안함        
-        answer.push(numbers[index]);
-        numbers.splice(index, 1); // answer에 push한 수를 numbers에서 지워야 4개의 수가 겹치지 않음.  
-      }
-
-      const tries = [];
+      makeAnswer(); // 빈배열을 돌리기 위한 실행
 
       function checkInput(input) { //절차상 오류를 검사하는 코드
         if(input.length !== 4){// 길이가 4가 아닌지
@@ -42,7 +45,15 @@
       }
       return true;
     }
-
+      let num = 0;
+      function showTime(){
+        $logs.innerHTML = `새 게임시작까지 ${5-num++}초 남았습니다.`;
+        if(num>5){
+          clearInterval(this);
+          $logs.innerHTML = ``;
+        }
+      }
+      
       $form.addEventListener('submit', ()=>{
         let strike = 0;
         let ball = 0;
@@ -53,12 +64,24 @@
           return;
         }
         if(answer.join("") === value){
-            $logs.textContent = "HomeRun!";
+          $logs.textContent = "HomeRun!";
+          const tId = setInterval(showTime, 1000);
+          out = 1;
+          numbers = [];
+          answer = [];
+          tries = [];
+          makeAnswer();
             return;
           }
         if(tries.length >= 9||out==3){// tries.length는 왜 9인가?
             const message = document.createTextNode(`You Lose! The answer is ${answer.join("")}`) ;
             $logs.appendChild(message);
+            const tId = setInterval(showTime, 1000);
+            out = 1;
+            numbers = [];
+            answer = [];
+            tries = [];
+            makeAnswer();
             return;
           }
         for (let i = 0; i < answer.length; i++){
